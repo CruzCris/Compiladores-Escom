@@ -1,0 +1,11 @@
+Escribir un programa en el cual se puedan construir AFN utilizando el método de Thompson.
+    Menú
+- Crear básico
+- Unir AFN's
+- Concatenar AFN's
+- Cerradura Kleen
+- Cerradura +
+- Opcional
+- Unir AFN's para análisis léxico
+- Convertir AFN a AFD
+- Análisis léxico
