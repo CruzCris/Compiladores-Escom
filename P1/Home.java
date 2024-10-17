@@ -44,10 +44,10 @@ public class Home {
                     Id1 = sc.nextInt();
                     System.out.println("Ingrese el id del segundo AFN");
                     Id2 = sc.nextInt();
-                    break;
                     afns.set(Id1, op.Concatenar(afns.get(Id1), afns.get(Id2)));
                     afns.remove(Id2);
                     System.out.println("AFN's concatenados");
+                    break;
                 case 4:
                     // Cerradura de Kleene
                     System.out.println("Cerradura de Kleene");
@@ -58,7 +58,10 @@ public class Home {
                     break;
                 case 6:
                     // Opcional
-                    System.out.println("Opcional");
+                    System.out.println("Ingrese el id del AFN");
+                    Id1 = sc.nextInt();
+                    afns.set(Id1, op.Opcional(afns.get(Id1)));
+                    System.out.println("Opcional aplicado");
                     break;
                 case 7:
                     // Unir AFN's para análisis léxico

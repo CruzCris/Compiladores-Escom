@@ -78,4 +78,29 @@ public class Operaciones {
         }
         return afn;
     }
+
+    public AFN Opcional(AFN afn){
+        Transicion Trans1 = new Transicion('\0','\0',afn.getEdoIni());
+        Estado Estado1 = new Estado(Trans1, false, -1);
+        Estado Estado2 = new Estado(true, -1);
+        Transicion Trans2 = new Transicion('\0','\0',Estado2);
+        Estado1.setTrans(Trans2);
+        afn.setEdoIni(Estado1);
+        for(Estado Edo : afn.getEdos()){
+            for(Transicion Trans : Edo.getTrans()){
+                for(Estado EstadoA : afn.getEdosAcept()){
+                    if(EstadoA == Trans.getEdo()){
+                        EstadoA.setEdoAcept(false);
+                        EstadoA.setTrans(Trans2);
+                        afn.removerEdosAcept(EstadoA);
+                    }
+                }
+            }
+        }
+        afn.setEdo(Estado1);
+        afn.setEdo(Estado2);
+        afn.setEdosAcept(Estado2);
+        return afn;
+    }
+
 }
