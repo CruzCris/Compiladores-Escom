@@ -103,4 +103,55 @@ public class Operaciones {
         return afn;
     }
 
+    public AFN CerraduraKleene(AFN afn){
+        Transicion Trans1 = new Transicion('\0','\0',afn.getEdoIni());
+        Estado Estado1 = new Estado(Trans1,false,-1);
+        Estado Estado2 = new Estado(true,-1);
+        Transicion Trans2 = new Transicion('\0','\0',Estado2);
+        Estado1.setTrans(Trans2);
+        afn.setEdoIni(Estado1);
+        afn.setEdo(Estado1);
+        afn.setEdo(Estado2);
+        for(Estado Edo : afn.getEdos()){
+            for(Transicion Trans : Edo.getTrans()){
+                for(Estado EstadoA : afn.getEdosAcept()){
+                    if(EstadoA == Trans.getEdo()){
+                        EstadoA.setEdoAcept(false);
+                        EstadoA.setTrans(Trans1);
+                        EstadoA.setTrans(Trans2);
+                        afn.setEdo(EstadoA);
+                        afn.removerEdosAcept(EstadoA);
+                    }
+                }
+            }
+        }
+        afn.setEdosAcept(Estado2);
+        return afn;
+    }
+
+    public AFN CerraduraPos(AFN afn){
+        Transicion Trans1 = new Transicion('\0','\0',afn.getEdoIni());
+        Estado Estado1 = new Estado(Trans1,false,-1);
+        afn.setEdoIni(Estado1);
+        afn.setEdo(Estado1);
+        Estado Estado2 = new Estado(true,-1);
+        Transicion Trans2 = new Transicion('\0','\0',Estado2);
+        for(Estado Edo : afn.getEdos()){
+            for(Transicion Trans : Edo.getTrans()){
+                for(Estado EstadoA : afn.getEdosAcept()){
+                    if(EstadoA == Trans.getEdo()){
+                        EstadoA.setEdoAcept(false);
+                        EstadoA.setTrans(Trans1);
+                        EstadoA.setTrans(Trans2);
+                        afn.setEdo(EstadoA);
+                        afn.removerEdosAcept(EstadoA);
+                    }
+                }
+            }
+        }
+        afn.setEdo(Estado2);
+        afn.setEdosAcept(Estado2);
+        return afn;
+    }
+
 }

@@ -50,18 +50,24 @@ public class Home {
                     break;
                 case 4:
                     // Cerradura de Kleene
-                    System.out.println("Cerradura de Kleene");
+                    System.out.println("Ingrese el id del AFN");
+                    Id1 = sc.nextInt();
+                    afns.set(Id1, op.CerraduraKleene(afns.get(Id1)));
+                    System.out.println("Cerradura de Kleene aplicada al AFN");
                     break;
                 case 5:
                     // Cerradura positiva
-                    System.out.println("Cerradura positiva");
+                    System.out.println("Ingrese el id del AFN");
+                    Id1 = sc.nextInt();
+                    afns.set(Id1, op.CerraduraPos(afns.get(Id1)));
+                    System.out.println("Cerradura positiva aplicada al AFN");
                     break;
                 case 6:
                     // Opcional
                     System.out.println("Ingrese el id del AFN");
                     Id1 = sc.nextInt();
                     afns.set(Id1, op.Opcional(afns.get(Id1)));
-                    System.out.println("Opcional aplicado");
+                    System.out.println("Opcional aplicado al AFN");
                     break;
                 case 7:
                     // Unir AFN's para análisis léxico
