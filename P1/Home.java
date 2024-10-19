@@ -4,16 +4,18 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class Home {
-    private static Operaciones op = new Operaciones(); // Definición de variable de clase
-
+    private static Operaciones op = new Operaciones(); 
+    private static ArrayList<AFN> afns = new ArrayList<>();
     public static void main(String[] args) {
         ventanaMain();
-        ArrayList<AFN> afns = new ArrayList<AFN>();
+        
     }
 
 
@@ -83,8 +85,10 @@ public class Home {
             public void actionPerformed(ActionEvent e) {
                 char simboloInf = entradaSimboloInf.getText().charAt(0);
                 char simboloSup = entradaSimboloSup.getText().charAt(0);
-                AFN afn = op.CrearBasico(simboloInf, simboloSup); // Ajusta esta línea para usar el método correcto
+                AFN afn = op.CrearBasico(simboloInf, simboloSup);
+                afns.add(afn);
                 System.out.println("AFN creado con los símbolos: " + simboloInf + " a " + simboloSup);
+                System.out.println("AFN ID: " + afns.indexOf(afn)); 
             }
         });
 
@@ -101,15 +105,61 @@ public class Home {
         ventana.setSize(300, 300);
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         ventana.setLayout(new FlowLayout());
-
-        
-
-        JLabel label = new JLabel("Unir dos AFNs.");
+    
+        JLabel label = new JLabel("Seleccione dos AFNs para unir:");
         ventana.add(label);
-
+    
+        // JComboBox para seleccionar el primer AFN
+        JComboBox<String> comboBoxAFN1 = new JComboBox<>();
+        comboBoxAFN1.addItem("Seleccione un AFN"); // Opción por defecto
+        actualizarComboBoxAFNs(comboBoxAFN1);
+        ventana.add(comboBoxAFN1);
+    
+        // JComboBox para seleccionar el segundo AFN
+        JComboBox<String> comboBoxAFN2 = new JComboBox<>();
+        comboBoxAFN2.addItem("Seleccione un AFN"); // Opción por defecto
+        actualizarComboBoxAFNs(comboBoxAFN2);
+        ventana.add(comboBoxAFN2);
+    
+        JButton botonUnir = new JButton("Unir AFNs");
+        botonUnir.addActionListener(e -> {
+            int index1 = comboBoxAFN1.getSelectedIndex() - 1; // Restar 1 para obtener el índice real
+            int index2 = comboBoxAFN2.getSelectedIndex() - 1; // Restar 1 para obtener el índice real
+    
+            // Verificar si ambos índices son válidos
+            if (index1 >= 0 && index2 >= 0) {
+                AFN afn1 = afns.get(index1);
+                AFN afn2 = afns.get(index2);
+                AFN afnUnido = op.Unir(afn1, afn2);
+                afns.add(afnUnido); 
+                if (index1 > index2) {
+                    afns.remove(index1);
+                    afns.remove(index2);
+                } else {
+                    afns.remove(index2);
+                    afns.remove(index1);
+                }
+    
+                JOptionPane.showMessageDialog(ventana, "AFNs unidos correctamente.");
+                actualizarComboBoxAFNs(comboBoxAFN1);
+                actualizarComboBoxAFNs(comboBoxAFN2);
+            } else {
+                JOptionPane.showMessageDialog(ventana, "Por favor, seleccione ambos AFNs.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        ventana.add(botonUnir);
+    
         ventana.setVisible(true);
     }
-
+    
+    // Método para actualizar el JComboBox con los AFNs disponibles
+    public static void actualizarComboBoxAFNs(JComboBox<String> comboBox) {
+        comboBox.removeAllItems();
+        comboBox.addItem("Seleccione un AFN"); // Opción por defecto
+        for (int i = 0; i < afns.size(); i++) {
+            comboBox.addItem("AFN ID: " + i); // Mostrar el ID en el ComboBox
+        }
+    }
     public static void ventanaConcatenarAFN() {
         JFrame ventana = new JFrame("Concatenar AFNs");
         ventana.setSize(300, 300);
