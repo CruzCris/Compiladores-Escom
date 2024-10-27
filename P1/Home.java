@@ -7,12 +7,13 @@ public class Home {
         boolean bandera = true;
         ArrayList<AFN> afns = new ArrayList<AFN>();
         Operaciones op = new Operaciones();
+        AFD afd = new AFD();
         Scanner sc = new Scanner(System.in);
 
         while(bandera){
             System.out.println("\tMenu de opciones");
             System.out.println("Elija la opcion que desea utilizar");
-            System.out.println("1.- Crear AFN basico\n2.- Unir AFN's\n3.- Concatenar AFN's\n4.-Cerradura de Kleene\n5.- Cerradura positiva\n6.- Opcional\n7.- Unir AFN's para análisis léxico\n8.- Convertir AFN a AFD\n9.- Análisis léxico\n10.- Salir");
+            System.out.println("1.- Crear AFN basico\n2.- Unir AFN's\n3.- Concatenar AFN's\n4.- Cerradura de Kleene\n5.- Cerradura positiva\n6.- Opcional\n7.- Unir AFN's para análisis léxico\n8.- Convertir AFN a AFD\n9.- Análisis léxico\n10.- Salir");
             System.out.println("Hay " + afns.size() + " AFNs");
             opcion = sc.nextInt();
             sc.nextLine();
@@ -75,7 +76,10 @@ public class Home {
                     break;
                 case 8:
                     // Convertir AFN a AFD
-                    System.out.println("Convertir AFN a AFD");
+                    System.out.println("Ingrese el id del AFN a convertir");
+                    Id1 = sc.nextInt();
+                    afd.Conversion(afns.get(Id1));
+                    System.out.println("Se convirtio el AFN a AFD exitosamente");
                     break;
                 case 9:
                     // Análisis léxico
@@ -84,6 +88,7 @@ public class Home {
                 default:
                     System.exit(0);
                     bandera = false;
+                    sc.close();
                     break;
             }
         }

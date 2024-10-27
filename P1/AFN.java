@@ -42,7 +42,7 @@ public class AFN {
         this.Edos.remove(Edo);
     }
 
-    public void setSimb(char Simb){
+    public void setSimbolos(char Simb){
         this.Alfabeto.add(Simb);
     }
 
