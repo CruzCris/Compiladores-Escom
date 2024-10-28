@@ -51,7 +51,7 @@ public class AFD {
         }
         return EdosIrA;
     }
-    
+
     public String Conversion(AFN afn){
         HashSet<Estado> EdoAux = new HashSet<>();
         Queue<HashSet<Estado>> ColaEdos = new LinkedList<>();
@@ -118,9 +118,9 @@ public class AFD {
             }
         }
 
-        int tabla[][] = new int[EdosAFD.size()][128];
+        int tabla[][] = new int[EdosAFD.size()][257];
         for(int i=0; i<EdosAFD.size(); i++){
-            for(int j=0; j<128; j++){
+            for(int j=0; j<257; j++){
                 tabla[i][j] = -1;
             }
         }
@@ -129,7 +129,7 @@ public class AFD {
             for(Transicion Trans : Edo.getTrans()){
                 tabla[EdosAFD.lastIndexOf(Edo)][(int) Trans.getSimbInf()] = Trans.getPosEdo();
             }
-            tabla[EdosAFD.lastIndexOf(Edo)][127] = Edo.getToken();
+            tabla[EdosAFD.lastIndexOf(Edo)][256] = Edo.getToken();
         }
 
         // Crear archivo de salida
@@ -144,7 +144,7 @@ public class AFD {
             FileWriter fw = new FileWriter(nombre+".txt");
             for(int i=0; i<EdosAFD.size(); i++){
                 String linea = "";
-                for(int j=0; j<128; j++){
+                for(int j=0; j<257; j++){
                     linea = linea + tabla[i][j] + ';';
                 }
                 fw.write(linea + '\n');
@@ -154,8 +154,28 @@ public class AFD {
             System.out.println("Error al crear el archivo");
             e.printStackTrace();
         }
-        //sc.close();
         return nombre;
+    }
+    
+    public AFN unirAFNs(HashSet<AFN> afns){
+        Estado edo = new Estado(false, -1);
+        AFN afn = new AFN();
+        for(AFN afnT : afns){
+            Transicion trans = new Transicion('\0', '\0', afnT.getEdoIni());
+            edo.setTrans(trans);
+            for(Estado edoT : afnT.getEdos()){
+                afn.setEdo(edoT);
+            }
+            for(Estado edoA : afnT.getEdosAcept()){
+                afn.setEdosAcept(edoA);
+            }
+            for(char simb : afnT.getAlfabeto()){
+                afn.setSimbolos(simb);
+            }
+        }
+        afn.setEdoIni(edo);
+        afn.setEdo(edo);
+        return afn;
     }
 
 }

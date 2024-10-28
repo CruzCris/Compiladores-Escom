@@ -13,7 +13,7 @@ public class Home {
         while(bandera){
             System.out.println("\tMenu de opciones");
             System.out.println("Elija la opcion que desea utilizar");
-            System.out.println("1.- Crear AFN basico\n2.- Unir AFN's\n3.- Concatenar AFN's\n4.- Cerradura de Kleene\n5.- Cerradura positiva\n6.- Opcional\n7.- Unir AFN's para análisis léxico\n8.- Convertir AFN a AFD\n9.- Análisis léxico\n10.- Salir");
+            System.out.println("1.- Crear AFN basico\n2.- Unir AFN's\n3.- Concatenar AFN's\n4.- Cerradura de Kleene\n5.- Cerradura positiva\n6.- Opcional\n7.- Unir AFN's para análisis léxico\n8.- Convertir AFN a AFD\n9.- Análisis léxico\n10.- Calculadora\n11.- Salir");
             System.out.println("Hay " + afns.size() + " AFNs");
             opcion = sc.nextInt();
             sc.nextLine();
@@ -72,7 +72,39 @@ public class Home {
                     break;
                 case 7:
                     // Unir AFN's para análisis léxico
-                    System.out.println("Unir AFN's para análisis léxico");
+                    HashSet<AFN> agregarAFNs = new HashSet<AFN>();
+                    ArrayList<AFN> seleccion = new ArrayList<AFN>();
+                    int indice = -2;
+                    while(indice != -1){
+                        System.out.println("\nIntroduce el \u00edndice del AFN a unir\nIntroduce -1 para terminar");
+                        indice = sc.nextInt();
+                        if(indice > -1){
+                            seleccion.add(afns.get(indice));
+                        }
+                    }
+                    for(AFN afn : seleccion){
+                        System.out.println("\nIntroduzca el token del AFN " + afns.indexOf(afn));
+                        int token = sc.nextInt();
+                        HashSet<Estado> eliminarEdos = new HashSet<Estado>();
+                        HashSet<Estado> agregarEdos = new HashSet<Estado>();
+                        for(Estado edoAcept : afn.getEdosAcept()){
+                            eliminarEdos.add(edoAcept);
+                            edoAcept.setToken(token);
+                            agregarEdos.add(edoAcept);
+                        }
+                        for(Estado edo : eliminarEdos){
+                            afn.removeEdo(edo);
+                            afn.removerEdosAcept(edo);
+                        }
+                        for(Estado edo : agregarEdos){
+                            afn.setEdo(edo);
+                            afn.setEdosAcept(edo);
+                        }
+                        agregarAFNs.add(afn);
+                    }
+                    afns.removeAll(seleccion);
+                    afns.add(afd.unirAFNs(agregarAFNs));
+                    System.out.println("Union de AFN's para analisis lexico exitoso");
                     break;
                 case 8:
                     // Convertir AFN a AFD
@@ -83,7 +115,27 @@ public class Home {
                     break;
                 case 9:
                     // Análisis léxico
-                    System.out.println("Análisis léxico");
+                    System.out.println("\nIntroduzca el nombre del AFD");
+                    String nombre = sc.nextLine();
+                    System.out.println("\nIngrese la cadena a analizar");
+                    AnalizadorLexico lexico = new AnalizadorLexico(nombre, sc.nextLine());
+                    boolean continuarLexema = true;
+                    while(continuarLexema){
+                        int token = lexico.yylex();
+                        System.out.println("Token: " + token);
+                        System.out.println("Lexema: " + lexico.yytext() + "\n");
+                        if(token == 0){
+                            continuarLexema = false;
+                        }
+                    }
+                    System.out.println("Analisis lexico exitoso");
+                    break;
+                case 10: 
+                    // Calculadora
+                    Calculadora calc = new Calculadora();
+                    System.out.println("\nIngrese la cadena a evaluar");
+                    cadena = sc.nextLine();
+                    calc.descRec("calculadora", cadena);
                     break;
                 default:
                     System.exit(0);
